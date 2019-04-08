@@ -9,7 +9,7 @@ import './index.css';
 
 const Header = ({ name, title, date }) => (
   <header>
-    <Link to="/1">
+    <Link to="/0">
       <span>{name}</span> — {title}
     </Link>
     <time>{date}</time>
@@ -32,16 +32,14 @@ class TemplateWrapper extends Component {
     const now = this.props.data.slide.index;
     const slidesLength = this.props.slidesLength;
 
-    if (now) {
-      if (keyCode === this.PREV && now === 1) {
-        return false;
-      } else if (this.NEXT.indexOf(keyCode) !== -1 && now === slidesLength) {
-        return false;
-      } else if (this.NEXT.indexOf(keyCode) !== -1) {
-        navigate(`/${now + 1}`);
-      } else if (keyCode === this.PREV) {
-        navigate(`/${now - 1}`);
-      }
+    if (keyCode === this.PREV && now === 0) {
+      return false;
+    } else if (this.NEXT.indexOf(keyCode) !== -1 && now === slidesLength - 1) {
+      return false;
+    } else if (this.NEXT.indexOf(keyCode) !== -1) {
+      navigate(`/${now + 1}`);
+    } else if (keyCode === this.PREV) {
+      navigate(`/${now - 1}`);
     }
   };
 

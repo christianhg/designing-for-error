@@ -58,7 +58,7 @@ exports.createPages = ({ actions, createNodeId, graphql }) => {
         .digest(`hex`);
 
       createNode({
-        id: createNodeId(`${node.id}_${index + 1} >>> Slide`),
+        id: createNodeId(`${node.id}_${index} >>> Slide`),
         parent: node.id,
         children: [],
         internal: {
@@ -66,17 +66,17 @@ exports.createPages = ({ actions, createNodeId, graphql }) => {
           contentDigest: digest,
         },
         html: html,
-        index: index + 1,
+        index: index,
       });
     });
 
     slides.forEach((slide, index) => {
       createPage({
-        path: `/${index + 1}`,
+        path: `/${index}`,
         component: blogPostTemplate,
         context: {
-          index: index + 1,
-          absolutePath: process.cwd() + `/src/slides#${index + 1}`,
+          index: index,
+          absolutePath: process.cwd() + `/src/slides#${index}`,
         },
       });
     });

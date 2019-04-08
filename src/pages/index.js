@@ -3,7 +3,7 @@ import { navigate } from 'gatsby';
 
 class Index extends Component {
   componentDidMount() {
-    navigate(`/1`, { replace: true });
+    navigate(`/0`, { replace: true });
   }
   render() {
     return <div />;
