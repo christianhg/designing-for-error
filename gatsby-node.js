@@ -44,18 +44,14 @@ exports.createPages = ({ actions, createNodeId, graphql }) => {
       return Promise.reject(result.errors);
     }
 
-    const slides = result.data.allMarkdownRemark.edges;
-    slides.sort((a, b) =>
-      a.node.fileAbsolutePath > b.node.fileAbsolutePath ? 1 : -1,
-    );
-    const nodes = slides.flatMap(s =>
-      s.node.html.split('<hr>').map(html => ({
-        node: s.node,
+    const slides = sortSlides(getSlides(result)).flatMap(slide =>
+      slide.node.html.split('<hr>').map(html => ({
+        node: slide.node,
         html,
       })),
     );
 
-    nodes.forEach(({ node, html }, index) => {
+    slides.forEach(({ node, html }, index) => {
       const digest = crypto
         .createHash(`md5`)
         .update(html)
@@ -74,7 +70,7 @@ exports.createPages = ({ actions, createNodeId, graphql }) => {
       });
     });
 
-    nodes.forEach((slide, index) => {
+    slides.forEach((slide, index) => {
       createPage({
         path: `/${index + 1}`,
         component: blogPostTemplate,
@@ -86,3 +82,13 @@ exports.createPages = ({ actions, createNodeId, graphql }) => {
     });
   });
 };
+
+function getSlides(result) {
+  return result.data.allMarkdownRemark.edges;
+}
+
+function sortSlides(slides) {
+  return [...slides].sort((slideA, slideB) =>
+    slideA.node.fileAbsolutePath > slideB.node.fileAbsolutePath ? 1 : -1,
+  );
+}
