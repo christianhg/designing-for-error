@@ -6,7 +6,7 @@ const _ = require('lodash');
 exports.onCreatePage = ({ page, actions }) => {
   const { createPage, deletePage } = actions;
 
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     // Remove trailing slash
     const newPage = Object.assign({}, page, {
       path: page.path === `/` ? page.path : page.path.replace(/\/$/, ``),
@@ -23,10 +23,8 @@ exports.onCreatePage = ({ page, actions }) => {
   });
 };
 
-// Create pages from markdown nodes
 exports.createPages = ({ actions, createNodeId, graphql }) => {
   const { createPage, createNode } = actions;
-  const blogPostTemplate = path.resolve(`src/templates/slide.js`);
 
   return graphql(`
     {
@@ -73,7 +71,7 @@ exports.createPages = ({ actions, createNodeId, graphql }) => {
     slides.forEach((slide, index) => {
       createPage({
         path: `/${index}`,
-        component: blogPostTemplate,
+        component: path.resolve(`src/templates/slide.js`),
         context: {
           index: index,
           absolutePath: process.cwd() + `/src/slides#${index}`,
