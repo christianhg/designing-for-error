@@ -42,33 +42,26 @@ exports.createPages = ({ actions, createNodeId, graphql }) => {
       return Promise.reject(result.errors);
     }
 
-    const slides = sortSlides(getSlides(result)).flatMap(slide =>
-      slide.node.html.split('<hr>').map(html => ({
-        node: slide.node,
-        html,
-      })),
-    );
+    const subslides = sortSlides(getSlides(result)).flatMap(extractSubslides);
 
-    slides.forEach(({ node, html }, index) => {
+    subslides.forEach(({ parentSlide, subslide }, index) => {
       const digest = crypto
         .createHash(`md5`)
-        .update(html)
+        .update(subslide)
         .digest(`hex`);
 
       createNode({
-        id: createNodeId(`${node.id}_${index} >>> Slide`),
-        parent: node.id,
+        id: createNodeId(`${parentSlide.id}_${index} >>> Slide`),
+        parent: parentSlide.id,
         children: [],
         internal: {
           type: `Slide`,
           contentDigest: digest,
         },
-        html: html,
+        html: subslide,
         index: index,
       });
-    });
 
-    slides.forEach((slide, index) => {
       createPage({
         path: `/${index}`,
         component: path.resolve(`src/templates/slide.js`),
@@ -89,4 +82,20 @@ function sortSlides(slides) {
   return [...slides].sort((slideA, slideB) =>
     slideA.node.fileAbsolutePath > slideB.node.fileAbsolutePath ? 1 : -1,
   );
+}
+
+function extractSubslides(slide) {
+  const subslides = slide.node.html.split('<hr>');
+
+  return subslides.length > 0
+    ? subslides.map(subslide => ({
+        parentSlide: slide.node,
+        subslide,
+      }))
+    : [
+        {
+          parentSlide: slide.node,
+          subslide: slide.node.html,
+        },
+      ];
 }
