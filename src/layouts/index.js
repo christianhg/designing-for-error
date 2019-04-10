@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { navigate, StaticQuery, graphql } from 'gatsby';
 import Swipeable from 'react-swipeable';
 import Transition from '../components/transition';
@@ -62,11 +61,6 @@ class TemplateWrapper extends Component {
     );
   }
 }
-
-TemplateWrapper.propTypes = {
-  children: PropTypes.node,
-  data: PropTypes.object,
-};
 
 export default props => (
   <StaticQuery
