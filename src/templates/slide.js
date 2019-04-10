@@ -1,13 +1,16 @@
 import React from 'react';
 import { graphql } from 'gatsby';
+import { Layout } from '../layouts/layout';
 
-export default ({ data, transition }) => (
-  <div style={{ width: '100%' }}>
-    <div
-      style={transition && transition.style}
-      dangerouslySetInnerHTML={{ __html: data.slide.html }}
-    />
-  </div>
+export default ({ data, location, transition }) => (
+  <Layout location={location} slideIndex={data.slide.index}>
+    <div style={{ width: '100%' }}>
+      <div
+        style={transition && transition.style}
+        dangerouslySetInnerHTML={{ __html: data.slide.html }}
+      />
+    </div>
+  </Layout>
 );
 
 export const query = graphql`

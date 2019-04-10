@@ -5,7 +5,6 @@ module.exports = {
     date: `April 12, 2019`,
   },
   plugins: [
-    `gatsby-plugin-layout`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,

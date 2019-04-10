@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "gatsby": "^2.0.33",
-    "gatsby-plugin-layout": "^1.0.1",
     "gatsby-plugin-react-helmet": "^3.0.0",
     "gatsby-plugin-sharp": "^2.0.14",
     "gatsby-remark-copy-images": "^0.2.1",

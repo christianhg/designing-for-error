@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { navigate, StaticQuery, graphql } from 'gatsby';
+import { navigate } from 'gatsby';
 import Swipeable from 'react-swipeable';
 import Transition from '../components/transition';
 import { Header } from './header';
 
-import './index.css';
-
-class TemplateWrapper extends Component {
+export class TemplateWrapper extends Component {
   NEXT = [13, 32, 39];
   PREV = 37;
 
@@ -19,17 +17,20 @@ class TemplateWrapper extends Component {
   };
 
   navigate = ({ keyCode }) => {
-    const now = this.props.data.slide.index;
+    const slideIndex = this.props.slideIndex;
     const slidesLength = this.props.slidesLength;
 
-    if (keyCode === this.PREV && now === 0) {
+    if (keyCode === this.PREV && slideIndex === 0) {
       return false;
-    } else if (this.NEXT.indexOf(keyCode) !== -1 && now === slidesLength - 1) {
+    } else if (
+      this.NEXT.indexOf(keyCode) !== -1 &&
+      slideIndex === slidesLength - 1
+    ) {
       return false;
     } else if (this.NEXT.indexOf(keyCode) !== -1) {
-      navigate(`/${now + 1}`);
+      navigate(`/${slideIndex + 1}`);
     } else if (keyCode === this.PREV) {
-      navigate(`/${now - 1}`);
+      navigate(`/${slideIndex - 1}`);
     }
   };
 
@@ -61,22 +62,3 @@ class TemplateWrapper extends Component {
     );
   }
 }
-
-export default props => (
-  <StaticQuery
-    query={graphql`
-      query IndexQuery {
-        allSlide {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-      }
-    `}
-    render={data => (
-      <TemplateWrapper slidesLength={data.allSlide.edges.length} {...props} />
-    )}
-  />
-);
