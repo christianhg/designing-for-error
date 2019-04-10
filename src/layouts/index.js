@@ -1,20 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, navigate, StaticQuery, graphql } from 'gatsby';
-import Helmet from 'react-helmet';
+import { navigate, StaticQuery, graphql } from 'gatsby';
 import Swipeable from 'react-swipeable';
 import Transition from '../components/transition';
+import { Header } from './header';
 
 import './index.css';
-
-const Header = ({ name, title, date }) => (
-  <header>
-    <Link to="/0">
-      <span>{name}</span> — {title}
-    </Link>
-    <time>{date}</time>
-  </header>
-);
 
 class TemplateWrapper extends Component {
   NEXT = [13, 32, 39];
@@ -52,18 +43,11 @@ class TemplateWrapper extends Component {
   }
 
   render() {
-    const { location, children, site } = this.props;
+    const { location, children } = this.props;
 
     return (
       <div>
-        <Helmet
-          title={`${site.siteMetadata.title} — ${site.siteMetadata.name}`}
-        />
-        <Header
-          name={site.siteMetadata.name}
-          title={site.siteMetadata.title}
-          date={site.siteMetadata.date}
-        />
+        <Header />
         <Swipeable
           onSwipedLeft={this.swipeLeft}
           onSwipedRight={this.swipeRight}
@@ -88,13 +72,6 @@ export default props => (
   <StaticQuery
     query={graphql`
       query IndexQuery {
-        site {
-          siteMetadata {
-            name
-            title
-            date
-          }
-        }
         allSlide {
           edges {
             node {
@@ -105,11 +82,7 @@ export default props => (
       }
     `}
     render={data => (
-      <TemplateWrapper
-        site={data.site}
-        slidesLength={data.allSlide.edges.length}
-        {...props}
-      />
+      <TemplateWrapper slidesLength={data.allSlide.edges.length} {...props} />
     )}
   />
 );
