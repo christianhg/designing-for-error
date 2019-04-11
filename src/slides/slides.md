@@ -2,7 +2,43 @@
 
 ---
 
+2nd slide
+
+---
+
+WAT
+
+---
+
 Idea
+
+---
+
+![PR](./pr.png)
+
+---
+
+**Railway Oriented Programming** — error handling in functional languages
+
+by Scott Wlaschin
+
+(2014)
+
+🎥 https://vimeo.com/97344498
+
+---
+
+**Functional Geekery**
+
+with David Chambers
+
+(2015)
+
+🎧 https://www.functionalgeekery.com/episode-31-david-chambers/
+
+---
+
+!FP 😰
 
 ---
 
@@ -18,31 +54,128 @@ Making it harder to choose the happy path
 
 ---
 
-`oembed: https://vimeo.com/97344498`
-
-`oembed: https://www.youtube.com/watch?v=mzidu-5iVRk`
+⚠️ Our code is fine
 
 ---
 
-```ts
+👍 Small improvements
+
+---
+
+```js
+getSomething().then(something => {
+  // do something
+});
+```
+
+---
+
+```js
+getSomething().then(
+  something => {
+    // do something
+  },
+  error => {
+    // deal with the error
+  },
+);
+```
+
+---
+
+Let's talk about Promises another time
+
+---
+
+```typescript
 import { DialogService } from '...';
-import { GettextCatalog } from '...;
+import { GettextCatalog } from '...';
 
 // ...
 
 constructor(
-    @Inject('gettextCatalog') private gettextCatalog: GettextCatalog,
-private dialogService: DialogService
+  @Inject('gettextCatalog') private gettextCatalog: GettextCatalog,
+  private dialogService: DialogService
 ) {}
 
 // ...
 
 getSomething(...)
-     .then(...)
-     .catch(() => {
-         this.dialogService.showErrorDialog(this.gettextCatalog.getString('My error message'))
-     })
+  .then(...)
+  .catch(() => {
+    this.dialogService.showErrorDialog(this.gettextCatalog.getString('My error message'))
+  });
 ```
+
+---
+
+```typescript
+getSomething(...)
+  .then(...)
+  .catch(() => {
+    this.dialogService.showErrorDialog('My error message')
+  })
+```
+
+---
+
+```typescript
+getSomething(...)
+  .then(...)
+  .catch(error => {
+    this.dialogService.showErrorDialog(error)
+  })
+```
+
+---
+
+```typescript
+getSomething(...)
+  .then(...)
+  .catch(() => {
+    this.dialogService.showError(CueError.SomeError)
+  })
+```
+
+---
+
+```typescript
+getSomething(...)
+  .then(...)
+  .catch(error => {
+    this.dialogService.showErrorWithLog(CueError.SomeError, error)
+  })
+```
+
+---
+
+```typescript
+export enum CueError {
+  SomeError,
+  SomeOtherError,
+  YetAnotherError,
+  ...
+}
+```
+
+---
+
+```typescript
+export enum CueError {
+  DropError,
+  WorkflowErrorRequiredField,
+  WorkflowErrorInsufficientRights,
+  WorkflowErrorForeignLock,
+}
+```
+
+---
+
+😕
+
+---
+
+📖 Let's read the commit
 
 ---
 
@@ -50,7 +183,33 @@ getSomething(...)
 CCIEFL-9651: Create centralised service to handle error messages
 
 The purpose is to have a single place to gather error messages.
+```
 
+---
+
+```
+// DialogService
+
+public showError(error: CueError): Promise<void> {
+  return this.showErrorDialog(
+    this.errorMessagesService.getErrorMessage(error)
+  );
+}
+
+public showErrorWithLog(error: CueError, log: string): Promise<void> {
+  console.error(log);
+  return this.showError(error);
+}
+
+```
+
+---
+
+Benefits?
+
+---
+
+```
 Some benefits:
 
 - Errors are no longer magic strings.
@@ -65,22 +224,30 @@ Some benefits:
   out error messages that often.)
 - It allows you to not worry about duplicating an error message.
 - It helps you remember to make the error message translatable.
+```
 
+---
+
+```
 Some downsides:
 
 - It can be hard to come up with a good name for an error (to use in the
-    `CueError` enum.)
+  `CueError` enum.)
 - I haven't found a nice way to pass "extra data" to show an interpolated error
-    message.
+  message.
 ```
 
 ---
 
 ```typescript
-export enum CueError {
-  DropError,
-  WorkflowErrorRequiredField,
-  WorkflowErrorInsufficientRights,
-  WorkflowErrorForeignLock,
-}
+const message = this.gettextCatalog.getString(
+  'Could not delete a page called {{pageName}}.',
+  { pageName: this.sectionPageLink.name },
+);
+
+this.dialogService.showErrorDialog(message);
 ```
+
+---
+
+🙇‍️
