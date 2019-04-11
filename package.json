@@ -7,7 +7,7 @@
     "prettier-staged": "pretty-quick --staged --pattern \"{**/*,*}.{md,js,css}\""
   },
   "dependencies": {
-    "gatsby": "^2.0.33",
+    "gatsby": "2.0.88",
     "gatsby-plugin-react-helmet": "^3.0.0",
     "gatsby-plugin-sharp": "^2.0.14",
     "gatsby-remark-copy-linked-files": "^2.0.11",
