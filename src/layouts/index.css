@@ -102,7 +102,7 @@ pre {
   font-size: 70%;
 
   display: inline-block;
-  overflow-x: scroll;
+  overflow-x: auto;
 
   margin: 2rem 0;
 
