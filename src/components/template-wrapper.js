@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { navigate } from 'gatsby';
 import Swipeable from 'react-swipeable';
-import Transition from './transition';
+import { Transition } from './transition';
 import { Header } from './header';
 
 export class TemplateWrapper extends Component {

@@ -20,32 +20,24 @@ const getTransitionStyles = {
   },
 };
 
-class Transition extends React.PureComponent {
-  render() {
-    const { children, location } = this.props;
-
-    return (
-      <TransitionGroup>
-        <ReactTransition
-          key={location.pathname}
-          timeout={{
-            enter: timeout,
-            exit: timeout,
+export const Transition = ({ children, location }) => (
+  <TransitionGroup>
+    <ReactTransition
+      key={location.pathname}
+      timeout={{
+        enter: timeout,
+        exit: timeout,
+      }}
+    >
+      {status => (
+        <div
+          style={{
+            ...getTransitionStyles[status],
           }}
         >
-          {status => (
-            <div
-              style={{
-                ...getTransitionStyles[status],
-              }}
-            >
-              {children}
-            </div>
-          )}
-        </ReactTransition>
-      </TransitionGroup>
-    );
-  }
-}
-
-export default Transition;
+          {children}
+        </div>
+      )}
+    </ReactTransition>
+  </TransitionGroup>
+);
