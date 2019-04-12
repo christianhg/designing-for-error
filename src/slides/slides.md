@@ -6,10 +6,6 @@
 
 ---
 
-WAT
-
----
-
 Idea
 
 ---
@@ -95,7 +91,7 @@ import { GettextCatalog } from '...';
 
 constructor(
   @Inject('gettextCatalog') private gettextCatalog: GettextCatalog,
-  private dialogService: DialogService
+  private dialogService: DialogService,
 ) {}
 
 // ...
@@ -103,7 +99,7 @@ constructor(
 getSomething(...)
   .then(...)
   .catch(() => {
-    this.dialogService.showErrorDialog(this.gettextCatalog.getString('My error message'))
+    this.dialogService.showErrorDialog(this.gettextCatalog.getString('My error message'));
   });
 ```
 
@@ -113,8 +109,8 @@ getSomething(...)
 getSomething(...)
   .then(...)
   .catch(() => {
-    this.dialogService.showErrorDialog('My error message')
-  })
+    this.dialogService.showErrorDialog('My error message');
+  });
 ```
 
 ---
@@ -123,8 +119,8 @@ getSomething(...)
 getSomething(...)
   .then(...)
   .catch(error => {
-    this.dialogService.showErrorDialog(error)
-  })
+    this.dialogService.showErrorDialog(error);
+  });
 ```
 
 ---
@@ -133,8 +129,8 @@ getSomething(...)
 getSomething(...)
   .then(...)
   .catch(() => {
-    this.dialogService.showError(CueError.SomeError)
-  })
+    this.dialogService.showError(CueError.SomeError);
+  });
 ```
 
 ---
@@ -143,8 +139,8 @@ getSomething(...)
 getSomething(...)
   .then(...)
   .catch(error => {
-    this.dialogService.showErrorWithLog(CueError.SomeError, error)
-  })
+    this.dialogService.showErrorWithLog(CueError.SomeError, error);
+  });
 ```
 
 ---
@@ -187,7 +183,7 @@ The purpose is to have a single place to gather error messages.
 
 ---
 
-```
+```typescript
 // DialogService
 
 public showError(error: CueError): Promise<void> {
@@ -200,7 +196,6 @@ public showErrorWithLog(error: CueError, log: string): Promise<void> {
   console.error(log);
   return this.showError(error);
 }
-
 ```
 
 ---
