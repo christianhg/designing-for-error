@@ -1,6 +1,6 @@
 import React from 'react';
 import { graphql } from 'gatsby';
-import { Layout } from '../layouts/layout';
+import { Layout } from '../components/layout';
 
 export default ({ data, location, transition }) => (
   <Layout location={location} slideIndex={data.slide.index}>
