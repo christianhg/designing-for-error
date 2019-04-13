@@ -23,18 +23,13 @@ exports.createPages = ({ actions, createNodeId, graphql }) => {
     const subslides = sortSlides(getSlides(result)).flatMap(extractSubslides);
 
     subslides.forEach(({ parentSlide, subslide }, index) => {
-      const digest = crypto
-        .createHash(`md5`)
-        .update(subslide)
-        .digest(`hex`);
-
       createNode({
         id: createNodeId(`${parentSlide.id}_${index} >>> Slide`),
         parent: parentSlide.id,
         children: [],
         internal: {
           type: `Slide`,
-          contentDigest: digest,
+          contentDigest: getContentDigest(subslide),
         },
         html: subslide,
         index: index,
@@ -76,4 +71,11 @@ function extractSubslides(slide) {
           subslide: slide.node.html,
         },
       ];
+}
+
+function getContentDigest(html) {
+  return crypto
+    .createHash(`md5`)
+    .update(html)
+    .digest(`hex`);
 }
