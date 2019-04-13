@@ -40,7 +40,6 @@ exports.createPages = ({ actions, createNodeId, graphql }) => {
         component: path.resolve(`src/templates/slide.js`),
         context: {
           index: index,
-          absolutePath: process.cwd() + `/src/slides#${index}`,
         },
       });
     });
