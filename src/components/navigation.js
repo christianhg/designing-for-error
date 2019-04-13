@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { navigate } from 'gatsby';
-import Swipeable from 'react-swipeable';
+import { Swipeable } from 'react-swipeable';
 import { Transition } from './transition';
 
 const KEY_CODE_ARROW_LEFT = 37;
