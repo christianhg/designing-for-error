@@ -22,7 +22,7 @@
     "react-transition-group": "^2.4.0"
   },
   "devDependencies": {
-    "prettier": "^1.16.4",
+    "prettier": "^1.17.0",
     "pretty-quick": "^1.10.0"
   }
 }
