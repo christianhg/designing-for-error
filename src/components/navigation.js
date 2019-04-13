@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { navigate } from 'gatsby';
 import Swipeable from 'react-swipeable';
 import { Transition } from './transition';
-import { Header } from './header';
 
 const KEY_CODE_ARROW_LEFT = 37;
 const KEY_CODE_ARROW_RIGHT = 39;
@@ -29,7 +28,7 @@ const createNav = ({ slideIndex, slidesLength }) => ({ keyCode }) => {
   }
 };
 
-export class TemplateWrapper extends Component {
+export class Navigation extends Component {
   constructor(props) {
     super(props);
 
@@ -71,19 +70,9 @@ export class TemplateWrapper extends Component {
     const { location, children } = this.props;
 
     return (
-      <div>
-        <Header />
-        <Swipeable
-          onSwipedLeft={this.swipeLeft}
-          onSwipedRight={this.swipeRight}
-        >
-          <Transition location={location}>
-            <div id="slide" style={{ width: '100%' }}>
-              {children}
-            </div>
-          </Transition>
-        </Swipeable>
-      </div>
+      <Swipeable onSwipedLeft={this.swipeLeft} onSwipedRight={this.swipeRight}>
+        <Transition location={location}>{children}</Transition>
+      </Swipeable>
     );
   }
 }
