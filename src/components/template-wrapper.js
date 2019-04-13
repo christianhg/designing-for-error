@@ -4,42 +4,67 @@ import Swipeable from 'react-swipeable';
 import { Transition } from './transition';
 import { Header } from './header';
 
+const KEY_CODE_ARROW_LEFT = 37;
+const KEY_CODE_ARROW_RIGHT = 39;
+const KEY_CODE_ENTER = 13;
+const KEY_CODE_SPACE = 32;
+const KEY_NEXT = [KEY_CODE_ARROW_RIGHT, KEY_CODE_ENTER, KEY_CODE_SPACE];
+const KEY_PREV = [KEY_CODE_ARROW_LEFT];
+
+const isKeyNext = keyCode => KEY_NEXT.includes(keyCode);
+const isKeyPrev = keyCode => KEY_PREV.includes(keyCode);
+const onFirstSlide = slideIndex => slideIndex === 0;
+const onLastSlide = ({ slideIndex, slidesLength }) =>
+  slideIndex === slidesLength - 1;
+
+const createNav = ({ slideIndex, slidesLength }) => ({ keyCode }) => {
+  if (isKeyPrev(keyCode) && onFirstSlide(slideIndex)) {
+    return false;
+  } else if (isKeyNext(keyCode) && onLastSlide({ slideIndex, slidesLength })) {
+    return false;
+  } else if (isKeyNext(keyCode)) {
+    navigate(`/${slideIndex + 1}`);
+  } else if (isKeyPrev(keyCode)) {
+    navigate(`/${slideIndex - 1}`);
+  }
+};
+
 export class TemplateWrapper extends Component {
-  NEXT = [13, 32, 39];
-  PREV = 37;
+  constructor(props) {
+    super(props);
+
+    this.nav = createNav({
+      slideIndex: props.slideIndex,
+      slidesLength: props.slidesLength,
+    }).bind(this);
+
+    this.onKeyDown = this.onKeyDown.bind(this);
+  }
 
   swipeLeft = () => {
-    this.navigate({ keyCode: this.NEXT[0] });
+    this.nav({
+      keyCode: KEY_CODE_ARROW_LEFT,
+    });
   };
 
   swipeRight = () => {
-    this.navigate({ keyCode: this.PREV });
+    this.nav({
+      keyCode: KEY_CODE_ARROW_RIGHT,
+    });
   };
 
-  navigate = ({ keyCode }) => {
-    const slideIndex = this.props.slideIndex;
-    const slidesLength = this.props.slidesLength;
-
-    if (keyCode === this.PREV && slideIndex === 0) {
-      return false;
-    } else if (
-      this.NEXT.indexOf(keyCode) !== -1 &&
-      slideIndex === slidesLength - 1
-    ) {
-      return false;
-    } else if (this.NEXT.indexOf(keyCode) !== -1) {
-      navigate(`/${slideIndex + 1}`);
-    } else if (keyCode === this.PREV) {
-      navigate(`/${slideIndex - 1}`);
-    }
-  };
+  onKeyDown({ keyCode }) {
+    this.nav({
+      keyCode,
+    });
+  }
 
   componentDidMount() {
-    document.addEventListener('keydown', this.navigate);
+    document.addEventListener('keydown', this.onKeyDown);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.navigate);
+    document.removeEventListener('keydown', this.onKeyDown);
   }
 
   render() {
